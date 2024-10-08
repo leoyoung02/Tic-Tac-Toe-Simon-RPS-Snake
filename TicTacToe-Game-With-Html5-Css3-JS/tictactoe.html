@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+<meta charset = "UTF-8">
+<meta name = "viewport" content="width=device-width, initial-scale=1.0">
+<title> Tic Tac Toe Game </title>
+
+<style>
+*
+    {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+    
+body
+    {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    width: 100%
+    }
+    
+#container
+    {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: auto;
+    }
+
+h3
+    {
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-align: center;
+    color: blueviolet;
+    }
+
+#board
+    {
+    display: grid;
+    grid-template-columns: repeat(3, 8rem);
+    grid-template-rows: repeat(3, 8rem);
+    gap: .04rem;
+    background-color: transparent;
+    margin-bottom: 1rem;
+    }
+    
+.cell
+    {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightblue;
+    border: none;
+    font-size: 8rem;
+    font-weight: 900;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+    }
+    
+.cell:hover
+    {
+    background-color: rgb(125, 183, 202);
+    }
+    
+#options
+    {
+    margin-bottom: 2rem;
+    }
+    
+button, label
+    {
+    margin-right: .1rem;
+    padding: .5rem 1rem;
+    background-color: rgb(40, 148, 184);
+    border: none;
+    font-size: 1rem;
+    font-weight: 900;
+    text-align: center;
+    text-transform: uppercase;
+    color: white;
+    cursor: pointer;
+    }
+
+button:hover, label:hover
+    {
+    background-color: red;
+    }
+
+#message
+    {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    color: black;
+    }
+</style>
+
+</head>
+
+<body>
+
+<div id = "container">
+    <h3> Tic Tac Toe </h3>
+
+    <div id = "board"> </div>
+    
+    <div id = "options">
+        <button id = "new-game"> New Game </button>
+        <label> <input type = "checkbox" id = "vs-computer"> Rebot </label>
+    </div>
+
+    <div id = "message"> </div>
+
+</div>
+
+<script>
+    // Initialize variables
+    const board = document.getElementById('board');
+    const newGameButton = document.getElementById('new-game');
+    const vsComputerCheckbox = document.getElementById('vs-computer');
+    const messageDisplay = document.getElementById('message');
+    let currentPlayer = 'X';
+    let cells = Array.from({ length: 9 });
+
+    // Create cells and add event listeners
+    cells.forEach((_, index) =>
+    {
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.dataset.index = index;
+    cell.addEventListener('click', handleCellClick);
+    board.appendChild(cell);
+    });
+
+    // Event listeners for buttons
+    newGameButton.addEventListener('click', startNewGame);
+
+    // Function to handle cell click
+    function handleCellClick(event)
+    {
+    const cell = event.target;
+    const index = cell.dataset.index;
+    if (cells[index] || checkWinner() || checkDraw()) return;
+    cells[index] = currentPlayer;
+    cell.textContent = currentPlayer;
+    if (checkWinner())
+    {
+    showMessage(`Player ${currentPlayer} wins!`);
+    }
+    else if (checkDraw())
+    {
+    showMessage("It's a draw!");
+    }
+    else
+    {
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    if (vsComputerCheckbox.checked)
+    {
+    computerPlay();
+    }
+    }
+    }
+
+    // Function for computer's move
+    function computerPlay()
+    {
+    // Implement computer's move here
+    // For simplicity, let's choose a random empty cell
+    const emptyCells = cells.reduce((acc, cell, index) =>
+    {
+    if (!cell) acc.push(index);
+    return acc;
+    },
+    []);
+    const randomIndex = Math.floor(Math.random() * emptyCells.length);
+    const index = emptyCells[randomIndex];
+    cells[index] = currentPlayer;
+    const cell = document.querySelector(`[data-index='${index}']`);
+    cell.textContent = currentPlayer;
+    if (checkWinner())
+    {
+    showMessage(`Computer wins!`);
+    }
+    else if (checkDraw())
+    {
+    showMessage("It's a draw!");
+    }
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+
+    // Function to start a new game
+    function startNewGame()
+    {
+    currentPlayer = 'X';
+    cells = Array.from({ length: 9 });
+    document.querySelectorAll('.cell').forEach(cell =>
+    {
+    cell.textContent = '';
+    });
+    messageDisplay.textContent = '';
+    vsComputerCheckbox.disabled = false;
+    }
+
+    // Function to check for a winner
+    function checkWinner()
+    {
+    const winningCombos =
+    [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+    [0, 4, 8], [2, 4, 6]             // diagonals
+    ];
+    return winningCombos.some(combo =>
+    {
+    const [a, b, c] = combo;
+    return cells[a] && cells[a] === cells[b] && cells[a] === cells[c];
+    });
+    }
+
+    // Function to check for a draw
+    function checkDraw()
+    {
+    return cells.every(cell => cell);
+    }
+
+    // Function to display a message
+    function showMessage(msg)
+    {
+    messageDisplay.textContent = msg;
+    }
+</script>
+
+</body>
+
+</html>

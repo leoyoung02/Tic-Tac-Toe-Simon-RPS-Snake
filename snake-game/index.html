@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <link rel="icon" type="image/x-icon" href="./assets/sgame.jpg">
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    
+    <h2>Snake Game</h2>
+    <div id="msg">Press space to pause or continue</div>
+    <div class="container">
+        <canvas id="gameboard" width="500px" height="500px"></canvas>
+        <div id="score">Score : <span id="scoreVal"></span></div>
+        <div>
+            <img src="./assets/restart.png" alt="Restart" id="restart-btn" class="restart-btn-default" onclick=reStartGame() />
+        </div>
+        <div class="controller">
+            <div class="ar-up">
+                <img src="./assets/arrow-up.png" alt="arrow-up" onclick=arrowUp() />
+            </div>
+            <div class="ar-mid">
+                <div class="ar-left">
+                    <img src="./assets/arrow-left.png" alt="arrow-left" onclick=arrowLeft() />
+                </div>
+                <div class="ar-right">
+                    <img src="./assets/arrow-right.png" alt="arrow-right" onclick=arrowRight() />
+                </div>
+            </div>
+            <div>
+                <div class="ar-downn">
+                    <img src="./assets/arrow-down.png" alt="arrow-down" onclick=arrowDown() />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
